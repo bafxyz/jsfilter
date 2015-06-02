@@ -8,11 +8,6 @@ module.exports =
     dest: 'dist'
     filter: 'isFile'
 
-  requirejs:
-    src: ['bower_components/requirejs/require.js']
-    dest: 'dist/js/require.js'
-    filter: 'isFile'
-
   js:
     expand: true
     cwd: 'app'

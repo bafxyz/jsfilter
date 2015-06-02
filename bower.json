@@ -16,11 +16,6 @@
     "tests"
   ],
   "devDependencies": {
-    "normalize-scss": "3.x",
-    "domready": "~0.3.0",
-    "requirejs": "~2.1.17"
-  },
-  "dependencies": {
-    "event-shim.js": "~0.1.1"
+    "normalize-scss": "3.x"
   }
 }

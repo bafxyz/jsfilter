@@ -16,7 +16,6 @@ module.exports =
     tasks: [
       'jscs'
       'copy'
-      'requirejs'
     ]
     options:
       livereload: true

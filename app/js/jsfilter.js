@@ -8,6 +8,158 @@
 
   'use strict';
 
+  var defaults = {
+    multiSelect: true,
+    showAvatars: true,
+    url: '/users.json',
+    data: {}
+  };
+
+  var replaceDictionary = {
+    'q': 'й',
+    'w': 'ц',
+    'e': 'у',
+    'r': 'к',
+    't': 'е',
+    'y': 'н',
+    'u': 'г',
+    'i': 'ш',
+    'o': 'щ',
+    'p': 'з',
+    '[': 'х',
+    ']': 'ъ',
+    'a': 'ф',
+    's': 'ы',
+    'd': 'в',
+    'f': 'а',
+    'g': 'п',
+    'h': 'р',
+    'j': 'о',
+    'k': 'л',
+    'l': 'д',
+    ';': 'ж',
+    '\'': 'э',
+    'z': 'я',
+    'x': 'ч',
+    'c': 'с',
+    'v': 'м',
+    'b': 'и',
+    'n': 'т',
+    'm': 'ь',
+    ',': 'б',
+    '.': 'ю',
+    '/': '.',
+    '`': 'ё',
+    '@': '"',
+    '#': '№',
+    '$': ';',
+    '^': ':',
+    '&': '?',
+    'й': 'q',
+    'ц': 'w',
+    'у': 'e',
+    'к': 'r',
+    'е': 't',
+    'н': 'y',
+    'г': 'u',
+    'ш': 'i',
+    'щ': 'o',
+    'з': 'p',
+    'х': '[',
+    'ъ': ']',
+    'ф': 'a',
+    'ы': 's',
+    'в': 'd',
+    'а': 'f',
+    'п': 'g',
+    'р': 'h',
+    'о': 'j',
+    'л': 'k',
+    'д': 'l',
+    'ж': ';',
+    'э': '\'',
+    'я': 'z',
+    'ч': 'x',
+    'с': 'c',
+    'м': 'v',
+    'и': 'b',
+    'т': 'n',
+    'ь': 'm',
+    'б': ',',
+    'ю': '.',
+    'ё': '`',
+    '№': '#'
+  };
+
+  var transliterateDictionary = {
+    'ё': 'yo',
+    'й': 'i',
+    'ц': 'ts',
+    'у': 'u',
+    'к': 'k',
+    'е': 'e',
+    'н': 'n',
+    'г': 'g',
+    'ш': 'sh',
+    'щ': 'sch',
+    'з': 'z',
+    'х': 'h',
+    'ъ': '\'',
+    'ф': 'f',
+    'ы': 'i',
+    'в': 'v',
+    'а': 'a',
+    'п': 'p',
+    'р': 'r',
+    'о': 'o',
+    'л': 'l',
+    'д': 'd',
+    'ж': 'zh',
+    'э': 'e',
+    'я': 'ya',
+    'ч': 'ch',
+    'с': 's',
+    'м': 'm',
+    'и': 'i',
+    'т': 't',
+    'ь': '\'',
+    'б': 'b',
+    'ю': 'yu',
+    'yo': 'ё',
+    'i': 'й',
+    'ts': 'ц',
+    'u': 'у',
+    'k': 'к',
+    'e': 'е',
+    'n': 'н',
+    'g': 'г',
+    'sh': 'ш',
+    'sch': 'щ',
+    'z': 'з',
+    'h': 'х',
+    '\'': 'ъ',
+    'f': 'ф',
+    'i': 'ы',
+    'v': 'в',
+    'a': 'а',
+    'p': 'п',
+    'r': 'р',
+    'o': 'о',
+    'l': 'л',
+    'd': 'д',
+    'zh': 'ж',
+    'e': 'э',
+    'ya': 'я',
+    'ch': 'ч',
+    's': 'с',
+    'm': 'м',
+    'i': 'и',
+    't': 'т',
+    '\'': 'ь',
+    'b': 'б',
+    'yu': 'ю'
+  };
+
   /**
    * @constructor Filter results with autocomplete functionality.
    *
@@ -19,44 +171,9 @@
   var _ = function(el, options) {
     this.el = el;
 
-    var defaults = {
-      multiSelect: true,
-      showAvatars: true,
-      url: '/users.json',
-      data: {}
-    };
-
-    this.options = this.extend(defaults, options || {});
+    this.options = extend(defaults, options || {});
 
     this.init();
-  };
-
-  /**
-   * Merge defaults with user options.
-   *
-   * @private
-   * @param {Object} defaults Default settings
-   * @param {Object} options User options
-   *
-   * @returns {Object} Merged values of defaults and options
-   */
-  _.prototype.extend = function(defaults, options) {
-    var extended = {};
-    var prop;
-
-    for (prop in defaults) {
-      if (Object.prototype.hasOwnProperty.call(defaults, prop)) {
-        extended[prop] = defaults[prop];
-      }
-    }
-
-    for (prop in options) {
-      if (Object.prototype.hasOwnProperty.call(options, prop)) {
-        extended[prop] = options[prop];
-      }
-    }
-
-    return extended;
   };
 
   /**
@@ -94,171 +211,7 @@
    *
    * @return {String} converted value
    */
-  _.prototype.convert = function(string) {
-    var dictionary = {
-      'q': 'й',
-      'w': 'ц',
-      'e': 'у',
-      'r': 'к',
-      't': 'е',
-      'y': 'н',
-      'u': 'г',
-      'i': 'ш',
-      'o': 'щ',
-      'p': 'з',
-      '[': 'х',
-      ']': 'ъ',
-      'a': 'ф',
-      's': 'ы',
-      'd': 'в',
-      'f': 'а',
-      'g': 'п',
-      'h': 'р',
-      'j': 'о',
-      'k': 'л',
-      'l': 'д',
-      ';': 'ж',
-      '\'': 'э',
-      'z': 'я',
-      'x': 'ч',
-      'c': 'с',
-      'v': 'м',
-      'b': 'и',
-      'n': 'т',
-      'm': 'ь',
-      ',': 'б',
-      '.': 'ю',
-      '/': '.',
-      '`': 'ё',
-      '@': '"',
-      '#': '№',
-      '$': ';',
-      '^': ':',
-      '&': '?',
-      'й': 'q',
-      'ц': 'w',
-      'у': 'e',
-      'к': 'r',
-      'е': 't',
-      'н': 'y',
-      'г': 'u',
-      'ш': 'i',
-      'щ': 'o',
-      'з': 'p',
-      'х': '[',
-      'ъ': ']',
-      'ф': 'a',
-      'ы': 's',
-      'в': 'd',
-      'а': 'f',
-      'п': 'g',
-      'р': 'h',
-      'о': 'j',
-      'л': 'k',
-      'д': 'l',
-      'ж': ';',
-      'э': '\'',
-      'я': 'z',
-      'ч': 'x',
-      'с': 'c',
-      'м': 'v',
-      'и': 'b',
-      'т': 'n',
-      'ь': 'm',
-      'б': ',',
-      'ю': '.',
-      'ё': '`',
-      '№': '#'
-    };
-
-    var result = string.split(/\s+/);
-    var i;
-
-    result = '';
-
-    for (i = 0; i < string.length; i++) {
-      result += dictionary[string.charAt(i)] || string.charAt(i);
-    }
-
-    return result;
-  };
-
-  /**
-   * Function to transliterate letters depend on dictionary from cirylic to latin.
-   *
-   * @param  {String} string
-   *
-   * @return {String} converted value
-   */
-  _.prototype.transliterate = function(string) {
-    var dictionary = {
-      'ё': 'yo',
-      'й': 'i',
-      'ц': 'ts',
-      'у': 'u',
-      'к': 'k',
-      'е': 'e',
-      'н': 'n',
-      'г': 'g',
-      'ш': 'sh',
-      'щ': 'sch',
-      'з': 'z',
-      'х': 'h',
-      'ъ': '\'',
-      'ф': 'f',
-      'ы': 'i',
-      'в': 'v',
-      'а': 'a',
-      'п': 'p',
-      'р': 'r',
-      'о': 'o',
-      'л': 'l',
-      'д': 'd',
-      'ж': 'zh',
-      'э': 'e',
-      'я': 'ya',
-      'ч': 'ch',
-      'с': 's',
-      'м': 'm',
-      'и': 'i',
-      'т': 't',
-      'ь': '\'',
-      'б': 'b',
-      'ю': 'yu',
-      'yo': 'ё',
-      'i': 'й',
-      'ts': 'ц',
-      'u': 'у',
-      'k': 'к',
-      'e': 'е',
-      'n': 'н',
-      'g': 'г',
-      'sh': 'ш',
-      'sch': 'щ',
-      'z': 'з',
-      'h': 'х',
-      '\'': 'ъ',
-      'f': 'ф',
-      'i': 'ы',
-      'v': 'в',
-      'a': 'а',
-      'p': 'п',
-      'r': 'р',
-      'o': 'о',
-      'l': 'л',
-      'd': 'д',
-      'zh': 'ж',
-      'e': 'э',
-      'ya': 'я',
-      'ch': 'ч',
-      's': 'с',
-      'm': 'м',
-      'i': 'и',
-      't': 'т',
-      '\'': 'ь',
-      'b': 'б',
-      'yu': 'ю'
-    };
+  _.prototype.convert = function(string, dictionary) {
 
     return string.split('').map(function(char) {
       return dictionary[char] || char;
@@ -272,14 +225,15 @@
    */
   _.prototype.filter = function(el) {
     var inputValue = el.value.trim().toLowerCase();
-    var convertedValue = this.convert(inputValue);
-    var transliteratedValue = this.transliterate(inputValue);
+    var convertedValue = this.convert(inputValue, replaceDictionary);
+    var transliteratedValue = this.convert(inputValue, transliterateDictionary);
+    var transliteratedConvertedValue = this.convert(transliteratedValue, replaceDictionary);
 
     console.log({
       'strict ': inputValue,
       'converted ': convertedValue,
       'transliterated ': transliteratedValue,
-      'transliterated converted ': this.convert(transliteratedValue)
+      'transliterated converted ': transliteratedConvertedValue
     });
 
     // Reset dropdown list
@@ -293,7 +247,7 @@
 
       // Check for strict, converted, transliterated, transliterated converted hit
       if (fullName.indexOf(inputValue) > -1 || fullName.indexOf(convertedValue) > -1 ||
-        fullName.indexOf(transliteratedValue) > -1 || fullName.indexOf(this.convert(transliteratedValue)) > -1) {
+        fullName.indexOf(transliteratedValue) > -1 || fullName.indexOf(transliteratedConvertedValue) > -1) {
 
         isAvailable = true;
       }
@@ -330,7 +284,7 @@
     rawHtml += data.firstname + ' ' + data.lastname + '</div><!-- /.c-filter-list__item -->';
 
     itemsContainer.innerHTML += rawHtml;
-    document.querySelector('.c-filter').appendChild(itemsContainer);
+    $('.c-filter').appendChild(itemsContainer);
   };
 
   /** Instanse init method. */
@@ -355,33 +309,87 @@
   };
 
   /**
+   * Merge defaults with user options.
+   *
+   * @private
+   * @param {Object} defaults Default settings
+   * @param {Object} options User options
+   *
+   * @returns {Object} Merged values of defaults and options
+   */
+  function extend(defaults, options) {
+    var extended = {};
+    var prop;
+
+    for (prop in defaults) {
+      if (Object.prototype.hasOwnProperty.call(defaults, prop)) {
+        extended[prop] = defaults[prop];
+      }
+    }
+
+    for (prop in options) {
+      if (Object.prototype.hasOwnProperty.call(options, prop)) {
+        extended[prop] = options[prop];
+      }
+    }
+
+    return extended;
+  }
+
+  // querySelector alias
+  function $(expr, con) {
+    return typeof expr === 'string' ? (con || document).querySelector(expr) : expr || null;
+  }
+
+  // querySelectorAll alias
+  function $$(expr, con) {
+    return Array.prototype.slice.call((con || document).querySelectorAll(expr));
+  }
+
+  // IE8 foreach implementarion
+  function forEachElement(selector, fn) {
+    var elements = document.querySelectorAll(selector);
+
+    for (var i = 0; i < elements.length; i++) {
+      fn(elements[i], i);
+    }
+  }
+
+  // Trim function for IE8
+  if (typeof String.prototype.trim !== 'function') {
+    String.prototype.trim = function() {
+      return this.replace(/^\s+|\s+$/g, '');
+    };
+  }
+
+  // Console log for IE8
+  if (typeof console === 'undefined' || typeof console.log === 'undefined') {
+    console.log = function(message) {
+      alert(message);
+    };
+  }
+
+  /**
    * Some data can be passed here then Document is ready.
    *
    * @param  {Object} data orbitary data
    */
   function ready(data) {
-    // IE8 foreach implementarion
-    function forEachElement(selector, fn) {
-      var elements = document.querySelectorAll(selector);
 
-      for (var i = 0; i < elements.length; i++) {
-        fn(elements[i], i);
-      }
-    }
+    $$('input.js-filter').forEach(function(input) {
 
-    // Trim function for IE8
-    if (typeof String.prototype.trim !== 'function') {
-      String.prototype.trim = function() {
-        return this.replace(/^\s+|\s+$/g, '');
-      };
-    }
+      new JsFilter(input);
+    });
+  }
 
-    // Console log for IE8
-    if (typeof console === 'undefined' || typeof console.log === 'undefined') {
-      console.log = function(message) {
-        alert(message);
-      };
-    }
+  // Make sure to export JsFilter on self when in a browser
+  if (typeof self !== 'undefined') {
+    self.JsFilter = _;
+  }
+
+  // Expose JsFilter as a CJS module
+  if (typeof exports === 'object') {
+    module.exports = _;
   }
 
   // Are we in a browser? Check for Document constructor
@@ -395,16 +403,6 @@
       // Wait for it
       document.addEventListener('DOMContentLoaded', ready);
     }
-  }
-
-  // Make sure to export JsFilter on self when in a browser
-  if (typeof self !== 'undefined') {
-    self.JsFilter = _;
-  }
-
-  // Expose JsFilter as a CJS module
-  if (typeof exports === 'object') {
-    module.exports = _;
   }
 
   return _;
