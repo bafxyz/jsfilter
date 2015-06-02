@@ -1,0 +1,9 @@
+default:
+  - 'jscs'
+  - 'copy'
+  - 'concurrent'
+  - 'autoprefixer'
+dev:
+  - 'clean'
+  - 'default'
+  - 'watch'
