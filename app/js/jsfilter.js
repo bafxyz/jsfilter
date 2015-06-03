@@ -125,8 +125,8 @@
     'ь': '\'',
     'б': 'b',
     'ю': 'yu',
-    'yo': 'ё',
-    'i': 'й',
+    'ë': 'ё',
+    'j': 'й',
     'ts': 'ц',
     'u': 'у',
     'k': 'к',
@@ -137,9 +137,9 @@
     'sch': 'щ',
     'z': 'з',
     'h': 'х',
-    '\'': 'ъ',
+    '\"': 'ъ',
     'f': 'ф',
-    'i': 'ы',
+    'y': 'ы',
     'v': 'в',
     'a': 'а',
     'p': 'п',
@@ -148,7 +148,7 @@
     'l': 'л',
     'd': 'д',
     'zh': 'ж',
-    'e': 'э',
+    'è': 'э',
     'ya': 'я',
     'ch': 'ч',
     's': 'с',
@@ -161,7 +161,7 @@
   };
 
   /**
-   * @constructor Filter results with autocomplete functionality.
+   * @constructor Filter results with auto-complete functionality.
    *
    * @param  {Object} el      input element
    * @param  {Object} options to override default values
@@ -208,6 +208,7 @@
    * Function to convert letters depend on dictionary.
    *
    * @param  {String} string
+   * @param  {Object} dictionary
    *
    * @return {String} converted value
    */
@@ -268,7 +269,7 @@
   _.prototype.createItem = function(itemsContainer, data) {
     var rawHtml = '<div class="c-filter-list__item">';
 
-    // Show checkboxes if multiSelect optio set
+    // Show checkboxes if multiSelect option set
     if (this.options.multiSelect) {
       rawHtml += '<label class="o-switcher" for="filterItem[' + data.id + ']">' +
         '<input type="checkbox" id="filterItem[' + data.id + ']">' +
@@ -287,7 +288,7 @@
     $('.c-filter').appendChild(itemsContainer);
   };
 
-  /** Instanse init method. */
+  /** Instance init method. */
   _.prototype.init = function() {
     var self = this;
 
@@ -346,7 +347,7 @@
     return Array.prototype.slice.call((con || document).querySelectorAll(expr));
   }
 
-  // IE8 foreach implementarion
+  // IE8 foreach implementation
   function forEachElement(selector, fn) {
     var elements = document.querySelectorAll(selector);
 
